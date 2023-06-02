@@ -1,5 +1,4 @@
 #import library
-import pymysql
 from flask import Flask, request, jsonify, json
 from firebase_admin import credentials, auth, firestore
 
