@@ -1,9 +1,8 @@
 #import library
 from flask import Flask, request, jsonify, json
-from firebase_admin import credentials, auth, firestore
 
 #import from another file
-from function import get_barang, get_barang_by_id
+from function import get_barang, get_barang_by_id, register
 
 
 app = Flask(__name__)
@@ -14,6 +13,13 @@ app = Flask(__name__)
 @app.route('/', methods = ['GET'])
 def welcome():
     return("Response bener!")
+
+# Endpoint /register untuk melakukan registrasi user ke Firebase
+@app.route('/register', methods=['POST'])
+def firebase_register():
+    email = request.json['email']
+    password = request.json['password']
+    return register(email, password)
 
 
 # Endpoint /barang untuk mendapatkan semua data barang
