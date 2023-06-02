@@ -44,18 +44,20 @@ def make_connection():
 # Fungsi untuk mendapatkan semua data barang dari tabel
 def get_barang():
     try :
-
         make_connection()
-        with conn.cursor() as cursor:
-            sql = 'SELECT * FROM data_barang'
-            cursor.execute(sql)
-            results = cursor.fetchall()
+        cursor = conn.cursor()
+        sql = "SELECT * FROM data_barang"
+        cursor.execute(sql)
 
+        results = cursor.fetchall()
+
+        cursor.close()
         conn.close()
 
         return results
     except pymysql.Error as e:
-        print("Error Barang tidak ada barang:", e)
+
+        print("Error Tidak ada barang :", e)
 
 
 
@@ -63,8 +65,8 @@ def get_barang_by_id(id_barang):
     try:
         make_connection()
         cursor = conn.cursor()
-        query = f"SELECT * FROM data_barang WHERE id = {id_barang}"
-        cursor.execute(query)
+        sql = f"SELECT * FROM data_barang WHERE id = {id_barang}"
+        cursor.execute(sql)
         
         
         barang = cursor.fetchone()
