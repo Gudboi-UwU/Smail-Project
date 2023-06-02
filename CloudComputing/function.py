@@ -1,5 +1,9 @@
+from flask import jsonify
 import pymysql
 import os
+import firebase_admin
+import requests
+from firebase_admin import credentials, auth, firestore
 
 # Konfigurasi koneksi
 connection_name = os.getenv("env_connection_name")
@@ -9,6 +13,27 @@ db_password = os.getenv("env_db_password")
 db_name = os.getenv("env_db_name")
 db_charset = os.getenv("env_db_charset")
 
+
+#Firebase
+cred = credentials.Certificate("serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
+
+
+#Fungsi untuk register ke Firebase
+def register(email, password):
+    try:
+        # Membuat user baru kedalam firebase
+        user = auth.create_user(
+            email=email,
+            password=password
+        )
+        return jsonify({'message': 'Registrasi Anda telah berhasil', 'UserID': user.uid})
+
+    except Exception as e:
+        return jsonify({'message': 'Registrasi Anda gagal', 'error': str(e)}), 400
+
+
+#Fungsi untuk test koneksi DB
 def test_db_connection():
     try:
         connection = pymysql.connect(
@@ -28,7 +53,7 @@ def test_db_connection():
 
 
 
-
+# Fungsi untuk menghubungkan ke Cloud SQL
 def make_connection():
     global conn;
     conn = pymysql.connect(
@@ -40,6 +65,7 @@ def make_connection():
         cursorclass=pymysql.cursors.DictCursor
     )
     return conn
+
 
 # Fungsi untuk mendapatkan semua data barang dari tabel
 def get_barang():
@@ -60,7 +86,7 @@ def get_barang():
         print("Error Tidak ada barang :", e)
 
 
-
+# Fungsi untuk mendapatkan barang tertentu berdasarkan id 
 def get_barang_by_id(id_barang):
     try:
         make_connection()
