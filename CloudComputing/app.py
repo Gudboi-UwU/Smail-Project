@@ -2,7 +2,7 @@
 from flask import Flask, request, jsonify, json
 
 #import from another file
-from function import get_barang, get_barang_by_id, register
+from function import get_barang, get_barang_by_id, register, login, reset_password
 
 
 app = Flask(__name__)
@@ -11,8 +11,8 @@ app = Flask(__name__)
 
 #Endpoint untuk mengetes routes
 @app.route('/', methods = ['GET'])
-def welcome():
-    return("Response bener!")
+def tes():
+    return("Api telah berjalan dengan baik !")
 
 # Endpoint /register untuk melakukan registrasi user ke Firebase
 @app.route('/register', methods=['POST'])
@@ -20,6 +20,23 @@ def firebase_register():
     email = request.json['email']
     password = request.json['password']
     return register(email, password)
+
+# Endpoint /login untuk melakukan login user
+@app.route('/login', methods=['POST'])
+def firebase_login():
+    email = request.json['email']
+    password = request.json['password']
+    return login(email, password)
+
+# Endpoint /reset-password untuk melakukan reset password user
+@app.route('/reset-password', methods=['POST'])
+def firebase_reset_password():
+    return reset_password()
+
+# @app.route('/reset-password', methods=['POST'])
+# def reset_password_route():
+#     return reset_password()
+
 
 
 # Endpoint /barang untuk mendapatkan semua data barang
