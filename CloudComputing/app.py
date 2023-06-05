@@ -28,7 +28,7 @@ def firebase_login():
     password = request.json['password']
     return login(email, password)
 
-# Endpoint /reset-password untuk melakukan reset password user
+# Endpoint /reset-password untuk melakukan reset password user ke Firebase
 @app.route('/reset-password', methods=['POST'])
 def firebase_reset_password():
     return reset_password()
